@@ -11,8 +11,7 @@ const Modulecontent = () => {
   const navigate = useNavigate();
   const moduleNum = parseInt(moduleNumber, 10);
 
-  const { setCompletedModules } = useContext(CourseContext);
-
+  const { completeModule } = useContext(CourseContext);
   // Find the module for this course and module number
   const module = modulesData.find(
     (m) => m.courseId === courseId && m.moduleNumber === moduleNum
@@ -24,25 +23,18 @@ const Modulecontent = () => {
 
   // Handler for Next button
   const handleNext = () => {
-    setCompletedModules((prev) => {
-      const newSet = new Set(prev);
-      newSet.add(moduleNum);
-      return newSet;
-    });
+  completeModule(courseId, module.id); // ✅ Mark current module complete
 
-    // Check if next module exists
-    const nextModuleExists = modulesData.some(
-      (m) => m.courseId === courseId && m.moduleNumber === moduleNum + 1
-    );
+  const nextModuleExists = modulesData.some(
+    (m) => m.courseId === courseId && m.moduleNumber === moduleNum + 1
+  );
 
-    if (nextModuleExists) {
-      navigate(`/courses/${courseId}/modules/${moduleNum + 1}`);
-    } else {
-      // If last module, go to assessment page
-      navigate(`/courses/${courseId}/assessment`);
-    }
-  };
-
+  if (nextModuleExists) {
+    navigate(`/courses/${courseId}/modules/${moduleNum + 1}`);
+  } else {
+    navigate(`/courses/${courseId}/assessment`);
+  }
+};
   // Handler for Previous button
   const handlePrev = () => {
     if (moduleNum > 1) {

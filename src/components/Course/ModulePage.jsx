@@ -1,60 +1,39 @@
-// ModulePage.jsx placeholder
-import React, { useState } from 'react';
+import React from 'react';
+import { useParams } from 'react-router-dom';
 import modules from '../../data/modules';
 
-const ModulePage = ({ courseId, onComplete }) => {
-  const courseModules = modules[courseId] || [];
-  const [moduleIndex, setModuleIndex] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
+const ModulePage = () => {
+  const { moduleNumber } = useParams();
+  const moduleKey = `module-${moduleNumber}`;
+  const currentModule = modules[moduleKey];
 
-  const currentModule = courseModules[moduleIndex];
-  const currentPage = currentModule?.pages[pageIndex];
+  if (!currentModule) return <div>No content available.</div>;
 
-  const handleNext = () => {
-    if (pageIndex < currentModule.pages.length - 1) {
-      setPageIndex(pageIndex + 1);
-    } else if (moduleIndex < courseModules.length - 1) {
-      setModuleIndex(moduleIndex + 1);
-      setPageIndex(0);
-    } else {
-      if (onComplete) onComplete(); // Notify parent component
-    }
-  };
-
-  if (!currentPage) return <div>No content available.</div>;
+  const { title, content } = currentModule;
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-xl mt-8">
-      <h2 className="text-2xl font-bold mb-4">{currentModule.title}</h2>
-      <h3 className="text-lg font-semibold mb-4">{currentPage.title}</h3>
-      
-      {currentPage.text && (
-        <p className="mb-4 text-gray-700">{currentPage.text}</p>
-      )}
+      <h2 className="text-2xl font-bold mb-4">{title}</h2>
 
-      {currentPage.image && (
+      {content.title && <h3 className="text-lg font-semibold mb-4">{content.title}</h3>}
+      {content.text && <p className="mb-4 text-gray-700">{content.text}</p>}
+
+      {content.imageUrl && (
         <img
-          src={currentPage.image}
-          alt="module content"
+          src={content.imageUrl}
+          alt="module"
           className="w-full max-h-80 object-contain rounded mb-4"
         />
       )}
 
-      {currentPage.video && (
+      {content.videoUrl && (
         <video controls className="w-full rounded mb-4">
-          <source src={currentPage.video} type="video/mp4" />
+          <source src={content.videoUrl} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       )}
 
-      <button
-        onClick={handleNext}
-        className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-      >
-        {moduleIndex === courseModules.length - 1 && pageIndex === currentModule.pages.length - 1
-          ? 'Finish Modules'
-          : 'Next'}
-      </button>
+      {/* You can add navigation buttons if needed later */}
     </div>
   );
 };

@@ -6,7 +6,7 @@ const CourseCard = ({ course }) => {
   const navigate = useNavigate();
 
   const handleEnroll = () => {
-    navigate(`/courses/${course.id}/description`);
+    navigate(`/courses/${course.id}`);
   };
 
   return (

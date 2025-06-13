@@ -1,6 +1,6 @@
 // AppRouter.jsx placeholder
 import React, { useContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route ,Navigate} from 'react-router-dom';
 
 import LoginPage from '../pages/Login';              // Your login page component
 import Courses from '../pages/Courses';                   // Courses listing

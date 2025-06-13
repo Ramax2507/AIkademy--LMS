@@ -10,6 +10,7 @@ const Courses = () => {
   const handleEnrollClick = (courseId) => {
     // Navigate to course description page on enroll click
     navigate(`/courses/${courseId}`);
+     return <navigate to="/coursedescription" replace />;
   };
 
   return (
@@ -20,7 +21,9 @@ const Courses = () => {
           <CourseCard
             key={course.id}
             course={course}
-            onEnroll={() => handleEnrollClick(course.id)}
+            onEnroll={() => handleEnrollClick(course.id)
+              
+            }
           />
         ))}
       </div>
