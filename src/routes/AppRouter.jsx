@@ -75,7 +75,7 @@ const AppRouter = () => (
       />
 
       <Route
-        path="/thankyou"
+        path="/courses/:courseId/assessment/thankyou"
         element={
           <RequireAuth>
             <ThankyouPage />

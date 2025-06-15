@@ -1,11 +1,17 @@
-// AssessmentPage.jsx placeholder
-import React, { useState } from 'react';
-import assessments from '../data/assessments'; // your MCQs data
+// AssessmentPage.jsx
+import React, { useState, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import assessments from '../data/assessments';
 import ProgressBar from '../components/UI/ProgressBar';
 import Button from '../components/UI/Button';
+import { CourseContext } from '../context/CourseContext';
 
-const Assessmentpage = () => {
-  const questions = assessments; // or assessments for the selected course
+const AssessmentPage = () => {
+  const { courseId } = useParams(); // Get courseId from URL
+  const navigate = useNavigate();
+  const { completeAssessment } = useContext(CourseContext); // ✅ context method
+
+  const questions = assessments[courseId] || [];
 
   const [currentQIndex, setCurrentQIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -34,25 +40,31 @@ const Assessmentpage = () => {
   };
 
   const handleSubmit = () => {
-    // Calculate score
     let calculatedScore = 0;
     questions.forEach((q, idx) => {
-      if (answers[idx] === q.correctAnswer) {
-        calculatedScore += 1;
-      }
+      if (answers[idx] === q.correctAnswer) calculatedScore += 1;
     });
     setScore(calculatedScore);
     setShowResult(true);
+
+    // ✅ mark assessment complete
+    completeAssessment(courseId);
   };
+
+  if (questions.length === 0) {
+    return <div className="p-6">No assessment found for this course.</div>;
+  }
 
   if (showResult) {
     return (
-      <div className="max-w-3xl mx-auto p-6">
+      <div className="max-w-3xl mx-auto p-6 text-center">
         <h2 className="text-2xl font-bold mb-4">Assessment Complete</h2>
         <p className="mb-4">
           Your score: {score} out of {questions.length}
         </p>
-        <Button onClick={() => window.location.reload()}>Retake Assessment</Button>
+        <Button onClick={() => navigate(`/courses/${courseId}`)}>
+          Back to Course
+        </Button>
       </div>
     );
   }
@@ -66,7 +78,7 @@ const Assessmentpage = () => {
       <ProgressBar progress={((currentQIndex + 1) / questions.length) * 100} />
 
       <div className="mt-4">
-        <p className="mb-4">{currentQuestion.question}</p>
+        <p className="mb-4 font-medium">{currentQuestion.question}</p>
         <form>
           {currentQuestion.options.map((option, idx) => (
             <label key={idx} className="block mb-2 cursor-pointer">
@@ -103,4 +115,4 @@ const Assessmentpage = () => {
   );
 };
 
-export default Assessmentpage;
+export default AssessmentPage;

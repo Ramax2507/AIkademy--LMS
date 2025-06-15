@@ -1,7 +1,7 @@
 // Header.jsx placeholder
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth'; // Optional custom hook to track login status
+import { useAuth } from '../../hooks/useAuth.jsx'; // Optional custom hook to track login status
 
 const Header = () => {
   const { user, logout } = useAuth(); // Assumes a useAuth hook for auth state
